@@ -1158,8 +1158,11 @@ window.location.href =
 
 async function verifyPaystackPayment() {
 
-  const reference =
-    localStorage.getItem("ayandata_payment_reference");
+const urlParams = new URLSearchParams(window.location.search);
+
+const reference =
+  urlParams.get("reference") ||
+  localStorage.getItem("ayandata_payment_reference");
 
   if (!reference || !supabaseClient) {
     return;
