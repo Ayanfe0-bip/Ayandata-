@@ -1070,10 +1070,14 @@
 
         }
 
+localStorage.setItem(
+  "ayandata_payment_reference",
+  data.reference
+);
 
-        window.location.href =
-          data.authorization_url;
-
+window.location.href =
+  data.authorization_url;
+        
 
       } catch (error) {
 
