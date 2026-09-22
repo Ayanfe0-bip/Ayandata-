@@ -387,14 +387,15 @@
     or OGDAMS_API_KEY here.
   */
 
-  const SUPABASE_URL = "YOUR_SUPABASE_URL";
-  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+  const SUPABASE_URL = "https://thivhdxiunszfllxbags.supabase.co"
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoaXZoZHhpdW5zemZsbHhiYWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwMTMxMjksImV4cCI6MjEwNTU4OTEyOX0.WuxkCDHgusHWgBXc2w0j8io21Di5oZD2Ig4Vs4h1Chw"
+  ) {";
 
   let supabaseClient = null;
 
   if (
-    SUPABASE_URL !== "https://thivhdxiunszfllxbags.supabase.co" &&
-    SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoaXZoZHhpdW5zemZsbHhiYWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwMTMxMjksImV4cCI6MjEwNTU4OTEyOX0.WuxkCDHgusHWgBXc2w0j8io21Di5oZD2Ig4Vs4h1Chw"
+    SUPABASE_URL !==  && SUPABASE _URL
+    SUPABASE_ANON_KEY !== "SUPABASE _ANON_KEY"
   ) {
     supabaseClient = window.supabase.createClient(
       SUPABASE_URL,
