@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AyanData</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -16,57 +16,59 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #f5f7fb;
+      background: #f4f7fb;
       color: #172033;
-      min-height: 100vh;
+    }
+
+    button,
+    input {
+      font: inherit;
     }
 
     button {
-      font: inherit;
       cursor: pointer;
-      border: none;
     }
 
     .app {
       max-width: 480px;
-      margin: auto;
       min-height: 100vh;
-      background: #fff;
-      padding-bottom: 80px;
+      margin: auto;
+      background: white;
+      padding-bottom: 85px;
     }
 
     header {
       background: #102a43;
       color: white;
-      padding: 24px 20px 30px;
+      padding: 25px 20px 30px;
       border-radius: 0 0 25px 25px;
     }
 
     .top {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
+      justify-content: space-between;
+      margin-bottom: 28px;
     }
 
-    .brand {
-      font-size: 25px;
+    .logo {
+      font-size: 26px;
       font-weight: 800;
     }
 
-    .user {
-      width: 40px;
-      height: 40px;
+    .avatar {
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      background: #fff;
+      background: white;
       color: #102a43;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
+      font-weight: 800;
     }
 
-    .balance-label {
+    .label {
       font-size: 13px;
       opacity: .8;
       margin-bottom: 7px;
@@ -78,19 +80,20 @@
       margin-bottom: 18px;
     }
 
-    .fund-btn {
-      background: #fff;
+    .fund {
+      background: white;
       color: #102a43;
-      padding: 12px 18px;
+      border: none;
       border-radius: 12px;
+      padding: 13px 18px;
       font-weight: 700;
     }
 
     main {
-      padding: 22px 18px;
+      padding: 24px 18px;
     }
 
-    .section-title {
+    .title {
       font-size: 18px;
       font-weight: 800;
       margin-bottom: 14px;
@@ -105,14 +108,14 @@
 
     .service {
       background: #f7f9fc;
-      border: 1px solid #e7ebf1;
+      border: 1px solid #e5eaf0;
       border-radius: 17px;
       padding: 18px 14px;
       text-align: left;
     }
 
-    .service-icon {
-      font-size: 26px;
+    .icon {
+      font-size: 27px;
       margin-bottom: 10px;
     }
 
@@ -124,10 +127,11 @@
     .service p {
       color: #718096;
       font-size: 12px;
+      line-height: 1.4;
     }
 
     .transactions {
-      border: 1px solid #e7ebf1;
+      border: 1px solid #e5eaf0;
       border-radius: 17px;
       overflow: hidden;
     }
@@ -137,20 +141,10 @@
       padding: 35px 20px;
       color: #718096;
       font-size: 14px;
+      line-height: 1.6;
     }
 
-    .transaction {
-      padding: 15px;
-      border-bottom: 1px solid #edf0f4;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .transaction:last-child {
-      border-bottom: none;
-    }
-
-    .bottom-nav {
+    .nav {
       position: fixed;
       bottom: 0;
       left: 50%;
@@ -158,28 +152,22 @@
       width: 100%;
       max-width: 480px;
       background: white;
-      border-top: 1px solid #e7ebf1;
+      border-top: 1px solid #e5eaf0;
       display: flex;
       justify-content: space-around;
-      padding: 11px 5px;
-      z-index: 10;
+      padding: 10px 5px;
     }
 
-    .nav-item {
+    .nav button {
       background: none;
+      border: none;
       color: #718096;
       font-size: 11px;
-      text-align: center;
     }
 
-    .nav-item.active {
-      color: #102a43;
-      font-weight: 700;
-    }
-
-    .nav-icon {
-      font-size: 20px;
+    .nav span {
       display: block;
+      font-size: 20px;
       margin-bottom: 3px;
     }
 
@@ -188,16 +176,16 @@
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,.55);
-      z-index: 20;
       align-items: flex-end;
       justify-content: center;
+      z-index: 100;
     }
 
     .modal.show {
       display: flex;
     }
 
-    .modal-box {
+    .box {
       width: 100%;
       max-width: 480px;
       background: white;
@@ -205,43 +193,51 @@
       padding: 25px 20px 35px;
     }
 
-    .modal-box h2 {
+    .box h2 {
+      margin-bottom: 8px;
+    }
+
+    .box p {
+      color: #718096;
+      font-size: 13px;
       margin-bottom: 18px;
     }
 
-    .input {
+    input {
       width: 100%;
-      padding: 14px;
       border: 1px solid #dce2ea;
       border-radius: 12px;
+      padding: 14px;
       margin-bottom: 12px;
-      font-size: 16px;
+      outline: none;
     }
 
-    .primary-btn {
+    .primary {
       width: 100%;
       background: #102a43;
       color: white;
-      padding: 14px;
+      border: none;
       border-radius: 12px;
+      padding: 14px;
       font-weight: 700;
-      margin-top: 5px;
     }
 
-    .close-btn {
+    .secondary {
       width: 100%;
       background: #edf1f5;
       color: #172033;
-      padding: 13px;
+      border: none;
       border-radius: 12px;
+      padding: 13px;
       margin-top: 10px;
     }
 
     .status {
       text-align: center;
       font-size: 13px;
-      margin-top: 10px;
+      margin-top: 12px;
       color: #718096;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -252,85 +248,88 @@
 
   <header>
     <div class="top">
-      <div class="brand">AyanData</div>
-      <div class="user" id="userInitial">A</div>
+      <div class="logo">AyanData</div>
+      <div class="avatar" id="avatar">A</div>
     </div>
 
-    <div class="balance-label">Available Balance</div>
-    <div class="balance" id="balance">₦0.00</div>
+    <div class="label">Available Balance</div>
 
-    <button class="fund-btn" onclick="openFundModal()">
+    <div class="balance" id="balance">
+      ₦0.00
+    </div>
+
+    <button class="fund" onclick="openFunding()">
       + Fund Wallet
     </button>
   </header>
 
   <main>
 
-    <div class="section-title">Services</div>
+    <div class="title">Services</div>
 
     <div class="services">
 
-      <button class="service" onclick="buyData()">
-        <div class="service-icon">📶</div>
+      <button class="service" onclick="dataPage()">
+        <div class="icon">📶</div>
         <h3>Buy Data</h3>
         <p>MTN, Airtel, Glo & 9mobile</p>
       </button>
 
-      <button class="service" onclick="buyAirtime()">
-        <div class="service-icon">📱</div>
+      <button class="service" onclick="airtimePage()">
+        <div class="icon">📱</div>
         <h3>Airtime</h3>
         <p>Recharge any network</p>
       </button>
 
-      <button class="service" onclick="showTransactions()">
-        <div class="service-icon">💳</div>
+      <button class="service" onclick="historyPage()">
+        <div class="icon">💳</div>
         <h3>Transactions</h3>
         <p>View your transaction history</p>
       </button>
 
-      <button class="service" onclick="showProfile()">
-        <div class="service-icon">👤</div>
+      <button class="service" onclick="profilePage()">
+        <div class="icon">👤</div>
         <h3>Profile</h3>
         <p>Manage your account</p>
       </button>
 
     </div>
 
-    <div class="section-title">Recent Transactions</div>
+    <div class="title">Recent Transactions</div>
 
-    <div class="transactions" id="transactions">
+    <div class="transactions">
       <div class="empty">
-        No transactions yet.<br />
+        No transactions yet.<br>
         Your transactions will appear here.
       </div>
     </div>
 
   </main>
 
-  <nav class="bottom-nav">
+  <nav class="nav">
 
-    <button class="nav-item active" onclick="goHome()">
-      <span class="nav-icon">⌂</span>
+    <button onclick="homePage()">
+      <span>⌂</span>
       Home
     </button>
 
-    <button class="nav-item" onclick="buyData()">
-      <span class="nav-icon">📶</span>
+    <button onclick="dataPage()">
+      <span>📶</span>
       Data
     </button>
 
-    <button class="nav-item" onclick="buyAirtime()">
-      <span class="nav-icon">📱</span>
+    <button onclick="airtimePage()">
+      <span>📱</span>
       Airtime
     </button>
 
-    <button class="nav-item" onclick="showTransactions()">
-      <span class="nav-icon">💳</span>
+    <button onclick="historyPage()">
+      <span>💳</span>
       History
     </button>
 
-    <button class="nav-item" onclick="showProfile()">
-      <span class="nav-icon">👤</span>
+    <button onclick="profilePage()">
+      <span>👤</span>
       Profile
     </button>
 
@@ -339,33 +338,32 @@
 </div>
 
 
-<!-- FUND WALLET MODAL -->
+<!-- FUND WALLET -->
 
 <div class="modal" id="fundModal">
 
-  <div class="modal-box">
+  <div class="box">
 
     <h2>Fund Wallet</h2>
 
+    <p>
+      Add money to your AyanData wallet securely with Paystack.
+    </p>
+
     <input
-      class="input"
-      id="fundAmount"
+      id="amount"
       type="number"
       min="100"
-      placeholder="Enter amount (₦)"
-    />
+      placeholder="Amount in ₦"
+    >
 
-    <button
-  class="fund-btn"
-  type="button"
-  onclick="alert('AyanData button is working!')"
->
-  + Fund Wallet
-</button>
+    <button class="primary" onclick="startPayment()">
+      Continue to Paystack
+    </button>
 
-    <div class="status" id="fundStatus"></div>
+    <div class="status" id="paymentStatus"></div>
 
-    <button class="close-btn" onclick="closeFundModal()">
+    <button class="secondary" onclick="closeFunding()">
       Cancel
     </button>
 
@@ -376,333 +374,342 @@
 
 <script>
 
-  /*
-    ============================================
-    AYANDATA SUPABASE CONFIGURATION
-    ============================================
+  /* =========================================
+     SUPABASE
+     ========================================= */
 
-    Replace the two values below with:
+  const SUPABASE_URL = "YOUR_SUPABASE_URL";
 
-    1. Your Supabase Project URL
-    2. Your Supabase anon/publishable key
+  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-    IMPORTANT:
-    Never put your PAYSTACK_SECRET_KEY
-    or OGDAMS_API_KEY here.
-  */
-
-  const SUPABASE_URL = "https://thivhdxiunszfllxbags.supabase.co"
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoaXZoZHhpdW5zemZsbHhiYWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwMTMxMjksImV4cCI6MjEwNTU4OTEyOX0.WuxkCDHgusHWgBXc2w0j8io21Di5oZD2Ig4Vs4h1Chw"
-  ) {";
 
   let supabaseClient = null;
 
+
   if (
-    SUPABASE_URL !==  && SUPABASE _URL
-    SUPABASE_ANON_KEY !== "SUPABASE _ANON_KEY"
+    SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
+    SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY"
   ) {
-    supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
-  }
 
-
-  /*
-    ============================================
-    LOAD USER
-    ============================================
-  */
-
-  async function loadUser() {
-
-    if (!supabaseClient) {
-      console.log("Supabase is not configured yet.");
-      return;
-    }
-
-    const {
-      data: { user }
-    } = await supabaseClient.auth.getUser();
-
-    if (!user) {
-      console.log("No user currently logged in.");
-      return;
-    }
-
-    const name =
-      user.user_metadata?.full_name ||
-      user.email?.split("@")[0] ||
-      "AyanData User";
-
-    document.getElementById("userInitial").textContent =
-      name.charAt(0).toUpperCase();
-
-    await loadWallet(user.id);
-  }
-
-
-  /*
-    ============================================
-    LOAD WALLET
-    ============================================
-  */
-
-  async function loadWallet(userId) {
-
-    if (!supabaseClient) return;
-
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from("wallets")
-      .select("balance")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    if (data) {
-
-      const amount = Number(data.balance || 0);
-
-      document.getElementById("balance").textContent =
-        "₦" + amount.toLocaleString("en-NG", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        });
-
-    }
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
 
   }
 
 
-  /*
-    ============================================
-    FUND WALLET
-    ============================================
-  */
+  /* =========================================
+     FUNDING MODAL
+     ========================================= */
 
-  function openFundModal() {
+  function openFunding() {
 
-    document.getElementById("fundModal")
+    document
+      .getElementById("fundModal")
       .classList.add("show");
 
   }
 
-  function closeFundModal() {
 
-    document.getElementById("fundModal")
+  function closeFunding() {
+
+    document
+      .getElementById("fundModal")
       .classList.remove("show");
 
-    document.getElementById("fundStatus")
+    document
+      .getElementById("paymentStatus")
       .textContent = "";
 
   }
 
 
-  async function fundWallet() {
-  const amount = Number(
-    document.getElementById("fundAmount").value
-  );
+  /* =========================================
+     PAYSTACK INITIALIZATION
+     ========================================= */
 
-  const status = document.getElementById("fundStatus");
-
-  if (!amount || amount < 100) {
-    status.textContent = "Minimum funding amount is ₦100.";
-    return;
-  }
-
-  if (!supabaseClient) {
-    status.textContent = "Supabase is not connected.";
-    return;
-  }
-
-  const {
-    data: { user },
-    error: userError
-  } = await supabaseClient.auth.getUser();
-
-  if (userError || !user) {
-    status.textContent =
-      "Please log in before funding your wallet.";
-    return;
-  }
-
-  status.textContent = "Connecting to Paystack...";
-
-  try {
-    const { data, error } =
-      await supabaseClient.functions.invoke(
-        "paystack-initialize",
-        {
-          body: {
-            amount: amount
-          }
-        }
-      );
-
-    if (error) {
-      console.error(error);
-      status.textContent =
-        "Payment connection failed.";
-      return;
-    }
-
-    if (data && data.authorization_url) {
-      window.location.href =
-        data.authorization_url;
-      return;
-    }
-
-    status.textContent =
-      "Paystack did not return a payment link.";
-
-  } catch (error) {
-    console.error(error);
-
-    status.textContent =
-      "Something went wrong connecting to Paystack.";
-  }
-  }
+  async function startPayment() {
 
     const amount =
-      Number(document.getElementById("fundAmount").value);
+      Number(
+        document.getElementById("amount").value
+      );
 
     const status =
-      document.getElementById("fundStatus");
+      document.getElementById("paymentStatus");
+
 
     if (!amount || amount < 100) {
 
       status.textContent =
-        "Minimum funding amount is ₦100.";
+        "Please enter at least ₦100.";
 
       return;
+
     }
+
 
     if (!supabaseClient) {
 
       status.textContent =
-        "Supabase connection is not configured yet.";
+        "Supabase is not configured.";
 
       return;
+
     }
 
-    const {
-      data: { user }
-    } = await supabaseClient.auth.getUser();
-
-    if (!user) {
-
-      status.textContent =
-        "Please log in before funding your wallet.";
-
-      return;
-    }
 
     status.textContent =
-      "Connecting to Paystack...";
+      "Checking your account...";
 
-    /*
-      Our Paystack Edge Function will be connected here.
-    */
 
     try {
 
       const {
-        data,
-        error
-      } = await supabaseClient.functions.invoke(
-        "paystack-initialize",
-        {
-          body: {
-            amount: amount
-          }
-        }
-      );
+        data: { user },
+        error: userError
+      } =
+        await supabaseClient.auth.getUser();
 
-      if (error) {
-        console.error(error);
+
+      if (userError || !user) {
+
         status.textContent =
-          "Unable to start payment.";
+          "Please log in to AyanData before funding your wallet.";
+
         return;
-      }
-
-      if (data?.authorization_url) {
-
-        window.location.href =
-          data.authorization_url;
-
-      } else {
-
-        status.textContent =
-          "Payment could not be initialized.";
 
       }
 
-    } catch (err) {
-
-      console.error(err);
 
       status.textContent =
-        "Something went wrong.";
+        "Connecting to Paystack...";
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.functions.invoke(
+          "paystack-initialize",
+          {
+            body: {
+              amount: amount
+            }
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          "Paystack Edge Function Error:",
+          error
+        );
+
+        status.textContent =
+          "Payment connection failed.";
+
+        return;
+
+      }
+
+
+      if (
+        data &&
+        data.authorization_url
+      ) {
+
+        status.textContent =
+          "Opening secure Paystack payment...";
+
+
+        setTimeout(function () {
+
+          window.location.href =
+            data.authorization_url;
+
+        }, 500);
+
+
+        return;
+
+      }
+
+
+      console.error(
+        "Paystack response:",
+        data
+      );
+
+
+      status.textContent =
+        "Paystack did not return a payment link.";
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Payment error:",
+        error
+      );
+
+      status.textContent =
+        "Something went wrong connecting to Paystack.";
 
     }
 
   }
 
 
-  /*
-    ============================================
-    SERVICES
-    ============================================
-  */
+  /* =========================================
+     LOAD ACCOUNT
+     ========================================= */
 
-  function buyData() {
+  async function loadAccount() {
+
+    if (!supabaseClient) {
+      return;
+    }
+
+
+    try {
+
+      const {
+        data: { user }
+      } =
+        await supabaseClient.auth.getUser();
+
+
+      if (!user) {
+        return;
+      }
+
+
+      const name =
+        user.user_metadata?.full_name ||
+        user.email?.split("@")[0] ||
+        "AyanData";
+
+
+      document
+        .getElementById("avatar")
+        .textContent =
+          name.charAt(0).toUpperCase();
+
+
+      await loadWallet(user.id);
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Account error:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =========================================
+     LOAD WALLET
+     ========================================= */
+
+  async function loadWallet(userId) {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("wallets")
+        .select("balance")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+
+    if (error) {
+
+      console.error(
+        "Wallet error:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    if (data) {
+
+      const balance =
+        Number(data.balance || 0);
+
+
+      document
+        .getElementById("balance")
+        .textContent =
+          "₦" +
+          balance.toLocaleString(
+            "en-NG",
+            {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }
+          );
+
+    }
+
+  }
+
+
+  /* =========================================
+     OTHER SERVICES
+     ========================================= */
+
+  function dataPage() {
 
     alert(
-      "AyanData Data Purchase\n\n" +
-      "Network selection and live Ogdams data plans will be connected next."
+      "AyanData Data\n\nLive Ogdams data plans will be connected here."
     );
 
   }
 
 
-  function buyAirtime() {
+  function airtimePage() {
 
     alert(
-      "AyanData Airtime\n\n" +
-      "Airtime vending will be connected next."
+      "AyanData Airtime\n\nAirtime vending will be connected here."
     );
 
   }
 
 
-  function showTransactions() {
+  function historyPage() {
 
     alert(
-      "Transaction History\n\n" +
-      "Your wallet transactions will appear here."
+      "AyanData Transactions\n\nYour transaction history will appear here."
     );
 
   }
 
 
-  function showProfile() {
+  function profilePage() {
 
     alert(
-      "Profile\n\n" +
-      "Account settings will be added here."
+      "AyanData Profile\n\nYour account settings will appear here."
     );
 
   }
 
 
-  function goHome() {
+  function homePage() {
 
     window.scrollTo({
       top: 0,
@@ -712,13 +719,11 @@
   }
 
 
-  /*
-    ============================================
-    START APPLICATION
-    ============================================
-  */
+  /* =========================================
+     START
+     ========================================= */
 
-  loadUser();
+  loadAccount();
 
 </script>
 
