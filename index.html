@@ -1152,7 +1152,76 @@ window.location.href =
 
     }
 
+/* =====================================================
+   VERIFY PAYSTACK PAYMENT
+   ===================================================== */
 
+async function verifyPaystackPayment() {
+
+  const reference =
+    localStorage.getItem("ayandata_payment_reference");
+
+  if (!reference || !supabaseClient) {
+    return;
+  }
+
+  try {
+
+    console.log("Verifying payment:", reference);
+
+    const { data, error } =
+      await supabaseClient.functions.invoke(
+        "Paystack-verify",
+        {
+          body: {
+            reference: reference
+          }
+        }
+      );
+
+    if (error) {
+      console.error("Payment verification error:", error);
+      return;
+    }
+
+    console.log("Payment verification result:", data);
+
+    if (
+      data &&
+      (
+        data.status === "success" ||
+        data.success === true
+      )
+    ) {
+
+      localStorage.removeItem(
+        "ayandata_payment_reference"
+      );
+
+      alert(
+        "Payment successful! Your AyanData wallet has been updated."
+      );
+
+      const {
+        data: { user }
+      } = await supabaseClient.auth.getUser();
+
+      if (user) {
+        await loadWallet(user.id);
+      }
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Verification failed:",
+      error
+    );
+
+  }
+
+}
     /* =====================================================
        INITIAL LOAD
        ===================================================== */
@@ -1160,7 +1229,9 @@ window.location.href =
     if (supabaseClient) {
 
       loadAccount();
-
+if (supabaseClient) {
+  verifyPaystackPayment();
+}
     } else {
 
       showAuth();
