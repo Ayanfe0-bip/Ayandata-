@@ -842,7 +842,7 @@
       }
 
 
-      authScreen.classList.add("hidden");
+await verifyPaystackPayment();      authScreen.classList.add("hidden");
 
       app.classList.remove("hidden");
 
@@ -1231,9 +1231,7 @@ const reference =
 
     if (supabaseClient) {
 
-      loadAccount();
-if (supabaseClient) {
-  verifyPaystackPayment();
+
 }
     } else {
 
