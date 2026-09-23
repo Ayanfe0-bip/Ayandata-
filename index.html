@@ -1173,15 +1173,28 @@ const reference =
     console.log("Verifying payment:", reference);
 
     const { data, error } =
-      await supabaseClient.functions.invoke(
-        "Paystack-verify",
-        {
-          body: {
-            reference: reference
-          }
-        }
-      );
+      
+const {
+  data: { session }
+} = await supabaseClient.auth.getSession();
 
+if (!session || !session.access_token) {
+  console.error("No active login session.");
+  return;
+}
+
+const { data, error } =
+  await supabaseClient.functions.invoke(
+    "Paystack-verify",
+    {
+      headers: {
+        Authorization: `Bearer ${session.access_token}`
+      },
+      body: {
+        reference: reference
+      }
+    }
+  );
     if (error) {
       console.error("Payment verification error:", error);
       return;
