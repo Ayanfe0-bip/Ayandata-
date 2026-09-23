@@ -1,23 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>AyanData - Data & Wallet</title>
 
-  <!-- Supabase -->
-  <script> window.addEventListener("error", function (event) {
-  alert("AyanData JavaScript Error:\n\n" + event.message);
-}); src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -57,9 +48,7 @@
       display: none !important;
     }
 
-    /* ==============================
-       AUTH
-    ============================== */
+    /* AUTH */
 
     .auth-screen {
       min-height: 100vh;
@@ -143,9 +132,7 @@
       color: #067647;
     }
 
-    /* ==============================
-       DASHBOARD
-    ============================== */
+    /* APP */
 
     header {
       background: #075e54;
@@ -185,19 +172,12 @@
     }
 
     .wallet {
-      background: linear-gradient(
-        135deg,
-        #075e54,
-        #0b806f
-      );
-
+      background: linear-gradient(135deg, #075e54, #0b806f);
       color: white;
       padding: 25px;
       border-radius: 18px;
       margin-bottom: 20px;
-
-      box-shadow:
-        0 8px 25px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
 
     .wallet small {
@@ -225,10 +205,7 @@
       background: white;
       padding: 22px 15px;
       border-radius: 15px;
-
-      box-shadow:
-        0 3px 12px rgba(0,0,0,0.06);
-
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
       text-align: center;
     }
 
@@ -249,9 +226,7 @@
       background: white;
       padding: 18px;
       border-radius: 15px;
-
-      box-shadow:
-        0 3px 12px rgba(0,0,0,0.06);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
     }
 
     .account p {
@@ -265,19 +240,15 @@
       width: 100%;
     }
 
-    /* ==============================
-       FUND MODAL
-    ============================== */
+    /* MODAL */
 
     .modal {
       display: none;
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.55);
-
       justify-content: center;
       align-items: center;
-
       padding: 20px;
       z-index: 1000;
     }
@@ -318,1192 +289,1314 @@
       color: white;
     }
 
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
   </style>
-
 </head>
-
 
 <body>
 
+<!-- =====================================================
+     AUTH SCREEN
+===================================================== -->
 
-  <!-- =========================================
-       AUTH SCREEN
-  ========================================== -->
+<div id="authScreen" class="auth-screen">
 
-  <div
-    id="authScreen"
-    class="auth-screen"
-  >
+  <div class="auth-box">
 
-    <div class="auth-box">
+    <div class="logo">AyanData</div>
 
-      <div class="logo">
-        AyanData
-      </div>
+    <div class="auth-subtitle">
+      Data, airtime & digital services
+    </div>
 
-      <div class="auth-subtitle">
-        Data, airtime & digital services
-      </div>
+    <div class="tabs">
 
+      <button
+        type="button"
+        id="loginTab"
+        class="tab active">
+        Login
+      </button>
 
-      <!-- TABS -->
-
-      <div class="tabs">
-
-        <button
-          type="button"
-          id="loginTab"
-          class="tab active"
-        >
-          Login
-        </button>
-
-        <button
-          type="button"
-          id="signupTab"
-          class="tab"
-        >
-          Sign Up
-        </button>
-
-      </div>
-
-
-      <!-- LOGIN FORM -->
-
-      <form id="loginForm">
-
-        <label for="loginEmail">
-          Email
-        </label>
-
-        <input
-          type="email"
-          id="loginEmail"
-          placeholder="Enter your email"
-          required
-        >
-
-
-        <label for="loginPassword">
-          Password
-        </label>
-
-        <input
-          type="password"
-          id="loginPassword"
-          placeholder="Enter your password"
-          required
-        >
-
-
-        <button
-          type="submit"
-          id="loginButton"
-          class="auth-submit"
-        >
-          Login
-        </button>
-
-      </form>
-
-
-      <!-- SIGN UP FORM -->
-
-      <form
-        id="signupForm"
-        class="hidden"
-      >
-
-        <label for="signupName">
-          Full Name
-        </label>
-
-        <input
-          type="text"
-          id="signupName"
-          placeholder="Enter your full name"
-          required
-        >
-
-
-        <label for="signupEmail">
-          Email
-        </label>
-
-        <input
-          type="email"
-          id="signupEmail"
-          placeholder="Enter your email"
-          required
-        >
-
-
-        <label for="signupPassword">
-          Password
-        </label>
-
-        <input
-          type="password"
-          id="signupPassword"
-          placeholder="Create a password"
-          minlength="6"
-          required
-        >
-
-
-        <label for="signupConfirmPassword">
-          Confirm Password
-        </label>
-
-        <input
-          type="password"
-          id="signupConfirmPassword"
-          placeholder="Confirm your password"
-          minlength="6"
-          required
-        >
-
-
-        <button
-          type="submit"
-          id="signupButton"
-          class="auth-submit"
-        >
-          Create Account
-        </button>
-
-      </form>
-
-
-      <div
-        id="authMessage"
-        class="message"
-      ></div>
+      <button
+        type="button"
+        id="signupTab"
+        class="tab">
+        Sign Up
+      </button>
 
     </div>
 
-  </div>
 
+    <!-- LOGIN -->
 
+    <form id="loginForm">
 
-  <!-- =========================================
-       MAIN APP
-  ========================================== -->
-
-  <div
-    id="app"
-    class="hidden"
-  >
-
-    <header>
-
-      <div>
-
-        <h1>
-          AyanData
-        </h1>
-
-        <span>
-          Smart digital services
-        </span>
-
-      </div>
-
-      <span id="headerUser"></span>
-
-    </header>
-
-
-    <main class="container">
-
-
-      <div class="welcome">
-
-        <h2 id="welcomeName">
-          Welcome 👋
-        </h2>
-
-        <p>
-          Manage your wallet and digital services.
-        </p>
-
-      </div>
-
-
-      <!-- WALLET -->
-
-      <div class="wallet">
-
-        <small>
-          Wallet Balance
-        </small>
-
-        <div
-          class="balance"
-          id="walletBalance"
-        >
-          ₦0.00
-        </div>
-
-        <button
-          type="button"
-          class="fund-btn"
-          id="fundWalletButton"
-        >
-          + Fund Wallet
-        </button>
-
-      </div>
-
-
-      <!-- SERVICES -->
-
-      <div class="services">
-
-
-        <div class="service">
-
-          <div class="service-icon">
-            📶
-          </div>
-
-          <strong>
-            Data
-          </strong>
-
-          <button
-            type="button"
-            id="dataButton"
-          >
-            Buy Data
-          </button>
-
-        </div>
-
-
-        <div class="service">
-
-          <div class="service-icon">
-            📞
-          </div>
-
-          <strong>
-            Airtime
-          </strong>
-
-          <button
-            type="button"
-            id="airtimeButton"
-          >
-            Buy Airtime
-          </button>
-
-        </div>
-
-
-        <div class="service">
-
-          <div class="service-icon">
-            📜
-          </div>
-
-          <strong>
-            History
-          </strong>
-
-          <button
-            type="button"
-            id="historyButton"
-          >
-            View
-          </button>
-
-        </div>
-
-
-        <div class="service">
-
-          <div class="service-icon">
-            👤
-          </div>
-
-          <strong>
-            Profile
-          </strong>
-
-          <button
-            type="button"
-            id="profileButton"
-          >
-            Open
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- ACCOUNT -->
-
-      <div class="account">
-
-        <p>
-
-          <strong>
-            Account:
-          </strong>
-
-          <span id="accountEmail">
-            Loading...
-          </span>
-
-        </p>
-
-
-        <button
-          type="button"
-          class="logout"
-          id="logoutButton"
-        >
-          Logout
-        </button>
-
-      </div>
-
-    </main>
-
-  </div>
-
-
-
-  <!-- =========================================
-       FUND MODAL
-  ========================================== -->
-
-  <div
-    id="fundModal"
-    class="modal"
-  >
-
-    <div class="modal-box">
-
-      <h3>
-        Fund Wallet
-      </h3>
-
-      <p>
-        Wallet funding will be connected after authentication is confirmed.
-      </p>
-
-      <label for="fundAmount">
-        Amount (₦)
-      </label>
+      <label>Email</label>
 
       <input
-        type="number"
-        id="fundAmount"
-        min="100"
-        placeholder="e.g. 1000"
+        type="email"
+        id="loginEmail"
+        placeholder="Enter your email"
+        required
       >
 
-      <div class="modal-buttons">
+      <label>Password</label>
 
-        <button
-          type="button"
-          class="cancel"
-          id="cancelFundingButton"
-        >
-          Cancel
-        </button>
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Enter your password"
+        required
+      >
 
-        <button
-          type="button"
-          class="pay"
-          id="continuePaymentButton"
-        >
-          Continue
-        </button>
+      <button
+        type="submit"
+        class="auth-submit"
+        id="loginButton">
+        Login
+      </button>
 
-      </div>
+    </form>
 
-      <div
-        id="fundMessage"
-        class="message"
-      ></div>
 
+    <!-- SIGN UP -->
+
+    <form
+      id="signupForm"
+      class="hidden">
+
+      <label>Full Name</label>
+
+      <input
+        type="text"
+        id="signupName"
+        placeholder="Enter your full name"
+        required
+      >
+
+      <label>Email</label>
+
+      <input
+        type="email"
+        id="signupEmail"
+        placeholder="Enter your email"
+        required
+      >
+
+      <label>Password</label>
+
+      <input
+        type="password"
+        id="signupPassword"
+        placeholder="Create a password"
+        minlength="6"
+        required
+      >
+
+      <label>Confirm Password</label>
+
+      <input
+        type="password"
+        id="signupConfirmPassword"
+        placeholder="Confirm your password"
+        minlength="6"
+        required
+      >
+
+      <button
+        type="submit"
+        class="auth-submit"
+        id="signupButton">
+        Create Account
+      </button>
+
+    </form>
+
+
+    <div
+      id="authMessage"
+      class="message">
     </div>
 
   </div>
 
+</div>
 
 
-  <!-- =========================================
-       JAVASCRIPT
-  ========================================== -->
+<!-- =====================================================
+     MAIN APPLICATION
+===================================================== -->
 
-  <script>
+<div id="app" class="hidden">
 
-    /* =========================================
-       SUPABASE CONFIG
-    ========================================= */
+  <header>
 
-    const SUPABASE_URL =
-      "https://thivhdxiunszfllxbags.supabase.co";
+    <div>
+      <h1>AyanData</h1>
+      <span>Smart digital services</span>
+    </div>
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_1o4FBBUkTgfWhRdVA2H5_Q_BBYWpR6w";
+    <span id="headerUser"></span>
+
+  </header>
 
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
+  <main class="container">
+
+    <div class="welcome">
+
+      <h2 id="welcomeName">
+        Welcome 👋
+      </h2>
+
+      <p>
+        Manage your wallet and digital services.
+      </p>
+
+    </div>
+
+
+    <!-- WALLET -->
+
+    <div class="wallet">
+
+      <small>
+        Wallet Balance
+      </small>
+
+      <div
+        class="balance"
+        id="walletBalance">
+        ₦0.00
+      </div>
+
+      <button
+        type="button"
+        class="fund-btn"
+        id="fundWalletButton">
+        + Fund Wallet
+      </button>
+
+    </div>
+
+
+    <!-- SERVICES -->
+
+    <div class="services">
+
+      <div class="service">
+
+        <div class="service-icon">
+          📶
+        </div>
+
+        <strong>
+          Data
+        </strong>
+
+        <button
+          type="button"
+          onclick="showComingSoon('Data')">
+          Buy Data
+        </button>
+
+      </div>
+
+
+      <div class="service">
+
+        <div class="service-icon">
+          📞
+        </div>
+
+        <strong>
+          Airtime
+        </strong>
+
+        <button
+          type="button"
+          onclick="showComingSoon('Airtime')">
+          Buy Airtime
+        </button>
+
+      </div>
+
+
+      <div class="service">
+
+        <div class="service-icon">
+          📜
+        </div>
+
+        <strong>
+          History
+        </strong>
+
+        <button
+          type="button"
+          onclick="showComingSoon('Transaction History')">
+          View
+        </button>
+
+      </div>
+
+
+      <div class="service">
+
+        <div class="service-icon">
+          👤
+        </div>
+
+        <strong>
+          Profile
+        </strong>
+
+        <button
+          type="button"
+          onclick="showProfile()">
+          Open
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ACCOUNT -->
+
+    <div class="account">
+
+      <p>
+        <strong>
+          Account:
+        </strong>
+
+        <span id="accountEmail">
+          Loading...
+        </span>
+      </p>
+
+      <button
+        type="button"
+        class="logout"
+        id="logoutButton">
+        Logout
+      </button>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- =====================================================
+     FUND WALLET MODAL
+===================================================== -->
+
+<div
+  id="fundModal"
+  class="modal">
+
+  <div class="modal-box">
+
+    <h3>
+      Fund Wallet
+    </h3>
+
+    <p>
+      Enter the amount you want to add to your AyanData wallet.
+    </p>
+
+    <label>
+      Amount (₦)
+    </label>
+
+    <input
+      type="number"
+      id="fundAmount"
+      min="100"
+      step="1"
+      placeholder="e.g. 1000"
+    >
+
+    <div class="modal-buttons">
+
+      <button
+        type="button"
+        class="cancel"
+        id="cancelFundingButton">
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="pay"
+        id="payButton">
+        Continue to Pay
+      </button>
+
+    </div>
+
+    <div
+      id="fundMessage"
+      class="message">
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   AYANDATA CONFIGURATION
+===================================================== */
+
+const SUPABASE_URL =
+  "https://thivhdxiunszfllxbags.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_1o4FBBUkTgfWhRdVA2H5_Q_BBYWpR6w";
+
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const authScreen =
+  document.getElementById("authScreen");
+
+const app =
+  document.getElementById("app");
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const signupForm =
+  document.getElementById("signupForm");
+
+const loginTab =
+  document.getElementById("loginTab");
+
+const signupTab =
+  document.getElementById("signupTab");
+
+const authMessage =
+  document.getElementById("authMessage");
+
+const fundModal =
+  document.getElementById("fundModal");
+
+const fundMessage =
+  document.getElementById("fundMessage");
+
+
+/* =====================================================
+   MESSAGE FUNCTIONS
+===================================================== */
+
+function showMessage(
+  element,
+  message,
+  type
+) {
+
+  element.textContent = message;
+
+  element.className =
+    "message " + type;
+
+  element.style.display =
+    "block";
+
+}
+
+
+function hideMessage(element) {
+
+  element.style.display =
+    "none";
+
+}
+
+
+/* =====================================================
+   AUTH TABS
+===================================================== */
+
+function showLogin() {
+
+  loginForm.classList.remove(
+    "hidden"
+  );
+
+  signupForm.classList.add(
+    "hidden"
+  );
+
+  loginTab.classList.add(
+    "active"
+  );
+
+  signupTab.classList.remove(
+    "active"
+  );
+
+  hideMessage(
+    authMessage
+  );
+
+}
+
+
+function showSignup() {
+
+  loginForm.classList.add(
+    "hidden"
+  );
+
+  signupForm.classList.remove(
+    "hidden"
+  );
+
+  loginTab.classList.remove(
+    "active"
+  );
+
+  signupTab.classList.add(
+    "active"
+  );
+
+  hideMessage(
+    authMessage
+  );
+
+}
+
+
+loginTab.addEventListener(
+  "click",
+  showLogin
+);
+
+
+signupTab.addEventListener(
+  "click",
+  showSignup
+);
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+loginForm.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+    const button =
+      document.getElementById(
+        "loginButton"
+      );
+
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
+
+    button.disabled = true;
+
+    button.textContent =
+      "Logging in...";
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.auth
+          .signInWithPassword({
+            email,
+            password
+          });
+
+      if (error) {
+        throw error;
+      }
+
+      await loadAccount();
+
+      loginForm.reset();
+
+    } catch(error) {
+
+      console.error(
+        "LOGIN ERROR:",
+        error
+      );
+
+      showMessage(
+        authMessage,
+        error.message ||
+          "Login failed.",
+        "error"
+      );
+
+    } finally {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Login";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   SIGN UP
+===================================================== */
+
+signupForm.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+    const name =
+      document
+        .getElementById("signupName")
+        .value
+        .trim();
+
+    const email =
+      document
+        .getElementById("signupEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("signupPassword")
+        .value;
+
+    const confirmPassword =
+      document
+        .getElementById(
+          "signupConfirmPassword"
+        )
+        .value;
+
+    const button =
+      document.getElementById(
+        "signupButton"
       );
 
 
-    /* =========================================
-       ELEMENTS
-    ========================================= */
-
-    const authScreen =
-      document.getElementById("authScreen");
-
-    const app =
-      document.getElementById("app");
-
-    const loginForm =
-      document.getElementById("loginForm");
-
-    const signupForm =
-      document.getElementById("signupForm");
-
-    const loginTab =
-      document.getElementById("loginTab");
-
-    const signupTab =
-      document.getElementById("signupTab");
-
-    const authMessage =
-      document.getElementById("authMessage");
-
-
-    /* =========================================
-       MESSAGES
-    ========================================= */
-
-    function showMessage(
-      element,
-      message,
-      type
+    if (
+      password !==
+      confirmPassword
     ) {
 
-      element.textContent =
-        message;
+      showMessage(
+        authMessage,
+        "Passwords do not match.",
+        "error"
+      );
 
-      element.className =
-        "message " + type;
-
-      element.style.display =
-        "block";
+      return;
 
     }
 
 
-    function hideMessage(element) {
+    button.disabled = true;
 
-      element.style.display =
-        "none";
+    button.textContent =
+      "Creating Account...";
 
-    }
 
+    try {
 
-    /* =========================================
-       AUTH TABS
-    ========================================= */
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.auth
+          .signUp({
 
-    function showLogin() {
+            email,
 
-      loginForm.classList.remove(
-        "hidden"
-      );
+            password,
 
-      signupForm.classList.add(
-        "hidden"
-      );
+            options: {
 
-      loginTab.classList.add(
-        "active"
-      );
-
-      signupTab.classList.remove(
-        "active"
-      );
-
-      hideMessage(
-        authMessage
-      );
-
-    }
-
-
-    function showSignup() {
-
-      loginForm.classList.add(
-        "hidden"
-      );
-
-      signupForm.classList.remove(
-        "hidden"
-      );
-
-      loginTab.classList.remove(
-        "active"
-      );
-
-      signupTab.classList.add(
-        "active"
-      );
-
-      hideMessage(
-        authMessage
-      );
-
-    }
-
-
-    loginTab.addEventListener(
-      "click",
-      showLogin
-    );
-
-
-    signupTab.addEventListener(
-      "click",
-      showSignup
-    );
-
-
-    /* =========================================
-       LOGIN
-    ========================================= */
-
-    loginForm.addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-
-        const button =
-          document.getElementById(
-            "loginButton"
-          );
-
-
-        const email =
-          document
-            .getElementById(
-              "loginEmail"
-            )
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById(
-              "loginPassword"
-            )
-            .value;
-
-
-        button.disabled =
-          true;
-
-        button.textContent =
-          "Logging in...";
-
-
-        try {
-
-          const {
-            data,
-            error
-          } =
-            await supabaseClient.auth.signInWithPassword({
-
-              email: email,
-
-              password: password
-
-            });
-
-
-          if (error) {
-
-            throw error;
-
-          }
-
-
-          console.log(
-            "Login successful:",
-            data.user
-          );
-
-
-          loginForm.reset();
-
-          hideMessage(
-            authMessage
-          );
-
-
-          await loadAccount();
-
-
-        } catch (error) {
-
-          console.error(
-            "Login error:",
-            error
-          );
-
-
-          showMessage(
-            authMessage,
-            error.message,
-            "error"
-          );
-
-
-        } finally {
-
-          button.disabled =
-            false;
-
-          button.textContent =
-            "Login";
-
-        }
-
-      }
-    );
-
-
-    /* =========================================
-       SIGN UP
-    ========================================= */
-
-    signupForm.addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-
-        const name =
-          document
-            .getElementById(
-              "signupName"
-            )
-            .value
-            .trim();
-
-
-        const email =
-          document
-            .getElementById(
-              "signupEmail"
-            )
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById(
-              "signupPassword"
-            )
-            .value;
-
-
-        const confirmPassword =
-          document
-            .getElementById(
-              "signupConfirmPassword"
-            )
-            .value;
-
-
-        if (
-          password !==
-          confirmPassword
-        ) {
-
-          showMessage(
-            authMessage,
-            "Passwords do not match.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        const button =
-          document.getElementById(
-            "signupButton"
-          );
-
-
-        button.disabled =
-          true;
-
-        button.textContent =
-          "Creating Account...";
-
-
-        try {
-
-          const {
-            data,
-            error
-          } =
-            await supabaseClient.auth.signUp({
-
-              email: email,
-
-              password: password,
-
-              options: {
-
-                data: {
-
-                  full_name:
-                    name
-
-                }
-
+              data: {
+                full_name: name
               }
 
-            });
+            }
+
+          });
 
 
-          if (error) {
-
-            throw error;
-
-          }
-
-
-          console.log(
-            "Signup result:",
-            data
-          );
-
-
-          signupForm.reset();
-
-
-          showMessage(
-            authMessage,
-            "Account created successfully. Check your email if confirmation is required.",
-            "success"
-          );
-
-
-          setTimeout(
-            function() {
-
-              showLogin();
-
-              document
-                .getElementById(
-                  "loginEmail"
-                )
-                .value =
-                email;
-
-            },
-            1500
-          );
-
-
-        } catch (error) {
-
-          console.error(
-            "Signup error:",
-            error
-          );
-
-
-          showMessage(
-            authMessage,
-            error.message,
-            "error"
-          );
-
-
-        } finally {
-
-          button.disabled =
-            false;
-
-          button.textContent =
-            "Create Account";
-
-        }
-
+      if (error) {
+        throw error;
       }
-    );
 
 
-    /* =========================================
-       LOAD ACCOUNT
-    ========================================= */
-
-    async function loadAccount() {
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await supabaseClient.auth.getUser();
-
-
-        if (error) {
-
-          throw error;
-
-        }
-
-
-        const user =
-          data.user;
-
-
-        if (!user) {
-
-          showAuth();
-
-          return;
-
-        }
-
-
-        authScreen.classList.add(
-          "hidden"
-        );
-
-        app.classList.remove(
-          "hidden"
-        );
-
-
-        const email =
-          user.email ||
-          "User";
-
-
-        const name =
-          user.user_metadata
-            ?.full_name ||
-          email.split("@")[0];
-
-
-        document
-          .getElementById(
-            "welcomeName"
-          )
-          .textContent =
-          "Welcome, " +
-          name +
-          " 👋";
-
-
-        document
-          .getElementById(
-            "headerUser"
-          )
-          .textContent =
-          email;
-
-
-        document
-          .getElementById(
-            "accountEmail"
-          )
-          .textContent =
-          email;
-
-
-        await loadWallet(
-          user.id
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Load account error:",
-          error
-        );
-
+      if (
+        data.user &&
+        !data.session
+      ) {
 
         showMessage(
           authMessage,
-          error.message,
-          "error"
+          "Account created. Please check your email to confirm your account, then log in.",
+          "success"
         );
 
+      } else {
 
-        showAuth();
+        showMessage(
+          authMessage,
+          "Account created successfully.",
+          "success"
+        );
 
       }
 
+
+      signupForm.reset();
+
+    } catch(error) {
+
+      console.error(
+        "SIGNUP ERROR:",
+        error
+      );
+
+      showMessage(
+        authMessage,
+        error.message ||
+          "Account creation failed.",
+        "error"
+      );
+
+    } finally {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Create Account";
+
     }
 
-
-    /* =========================================
-       SHOW AUTH
-    ========================================= */
-
-    function showAuth() {
-
-      app.classList.add(
-        "hidden"
-      );
-
-      authScreen.classList.remove(
-        "hidden"
-      );
-
-      showLogin();
-
-    }
+  }
+);
 
 
-    /* =========================================
-       LOGOUT
-    ========================================= */
+/* =====================================================
+   LOAD ACCOUNT
+===================================================== */
 
-    document
-      .getElementById(
-        "logoutButton"
-      )
-      .addEventListener(
-        "click",
-        async function() {
-
-          await supabaseClient.auth.signOut();
-
-          showAuth();
-
-        }
-      );
-
-
-    /* =========================================
-       WALLET
-    ========================================= */
-
-  async function loadWallet(userId) {
-
-  console.log("Loading wallet for:", userId);
+async function loadAccount() {
 
   try {
 
-    const { data, error } = await supabaseClient
-      .from("wallet")
-      .select("balance")
-      .eq("user_id", userId)
-      .maybeSingle();
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .getUser();
+
 
     if (error) {
-      console.error("Wallet error:", error);
       throw error;
     }
 
-    const balance = data?.balance ?? 0;
 
-    document.getElementById("walletBalance").textContent =
-      "₦" + Number(balance).toLocaleString("en-NG", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
+    const user =
+      data.user;
 
-    console.log("Wallet balance:", balance);
 
-  } catch (error) {
+    if (!user) {
 
-    console.error("Failed to load wallet:", error);
+      showAuth();
 
-    document.getElementById("walletBalance").textContent =
+      return;
+
+    }
+
+
+    authScreen.classList.add(
+      "hidden"
+    );
+
+    app.classList.remove(
+      "hidden"
+    );
+
+
+    const email =
+      user.email || "User";
+
+
+    const name =
+      user.user_metadata
+        ?.full_name ||
+      email.split("@")[0];
+
+
+    document
+      .getElementById(
+        "welcomeName"
+      )
+      .textContent =
+      "Welcome, " +
+      name +
+      " 👋";
+
+
+    document
+      .getElementById(
+        "headerUser"
+      )
+      .textContent =
+      email;
+
+
+    document
+      .getElementById(
+        "accountEmail"
+      )
+      .textContent =
+      email;
+
+
+    await loadWallet(
+      user.id
+    );
+
+
+    await checkPaymentReturn();
+
+
+  } catch(error) {
+
+    console.error(
+      "LOAD ACCOUNT ERROR:",
+      error
+    );
+
+    showMessage(
+      authMessage,
+      error.message ||
+        "Unable to load account.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   SHOW AUTH
+===================================================== */
+
+function showAuth() {
+
+  app.classList.add(
+    "hidden"
+  );
+
+  authScreen.classList.remove(
+    "hidden"
+  );
+
+  showLogin();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+document
+  .getElementById(
+    "logoutButton"
+  )
+  .addEventListener(
+    "click",
+    async function() {
+
+      await supabaseClient.auth
+        .signOut();
+
+      showAuth();
+
+    }
+  );
+
+
+/* =====================================================
+   WALLET
+===================================================== */
+
+async function loadWallet(
+  userId
+) {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("wallet")
+        .select("balance")
+        .eq(
+          "user_id",
+          userId
+        )
+        .maybeSingle();
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    const balance =
+      data?.balance ?? 0;
+
+
+    document
+      .getElementById(
+        "walletBalance"
+      )
+      .textContent =
+      "₦" +
+      Number(balance)
+        .toLocaleString(
+          "en-NG",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        );
+
+  } catch(error) {
+
+    console.error(
+      "WALLET ERROR:",
+      error
+    );
+
+    document
+      .getElementById(
+        "walletBalance"
+      )
+      .textContent =
       "₦0.00";
 
   }
 
+}
 
 
+/* =====================================================
+   FUND WALLET
+===================================================== */
 
-    /* =========================================
-       FUND WALLET MODAL
-    ========================================= */
+function openFunding() {
 
-    const fundModal =
-      document.getElementById(
-        "fundModal"
+  fundModal.style.display =
+    "flex";
+
+  document
+    .getElementById(
+      "fundAmount"
+    )
+    .value = "";
+
+  hideMessage(
+    fundMessage
+  );
+
+}
+
+
+function closeFunding() {
+
+  fundModal.style.display =
+    "none";
+
+}
+
+
+document
+  .getElementById(
+    "fundWalletButton"
+  )
+  .addEventListener(
+    "click",
+    openFunding
+  );
+
+
+document
+  .getElementById(
+    "cancelFundingButton"
+  )
+  .addEventListener(
+    "click",
+    closeFunding
+  );
+
+
+/* =====================================================
+   START PAYSTACK PAYMENT
+===================================================== */
+
+document
+  .getElementById(
+    "payButton"
+  )
+  .addEventListener(
+    "click",
+    startPayment
+  );
+
+
+async function startPayment() {
+
+  const amountInput =
+    document.getElementById(
+      "fundAmount"
+    );
+
+  const button =
+    document.getElementById(
+      "payButton"
+    );
+
+  const amount =
+    Number(
+      amountInput.value
+    );
+
+
+  if (
+    !amount ||
+    amount < 100
+  ) {
+
+    showMessage(
+      fundMessage,
+      "Enter an amount of at least ₦100.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  button.disabled =
+    true;
+
+  button.textContent =
+    "Opening Paystack...";
+
+
+  try {
+
+    const {
+      data: userData,
+      error: userError
+    } =
+      await supabaseClient.auth
+        .getUser();
+
+
+    if (
+      userError ||
+      !userData.user
+    ) {
+
+      throw new Error(
+        "You must be logged in before funding your wallet."
       );
 
-
-    document
-      .getElementById(
-        "fundWalletButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
-
-          fundModal.style.display =
-            "flex";
-
-        }
-      );
+    }
 
 
-    document
-      .getElementById(
-        "cancelFundingButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
-
-          fundModal.style.display =
-            "none";
-
-        }
-      );
-
-
-    /* =========================================
-       TEMPORARY SERVICE BUTTONS
-    ========================================= */
-
-    document
-      .getElementById(
-        "dataButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
-
-          alert(
-            "Data purchasing will be connected next."
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "airtimeButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
-
-          alert(
-            "Airtime purchasing will be connected next."
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "historyButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
-
-          alert(
-            "Transaction history will be connected next."
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "profileButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
-
-          alert(
-            "Profile will be connected next."
-          );
-
-        }
-      );
-
-
-    /* =========================================
-       START APP
-    ========================================= */
-
-  async function loadWallet(userId) {
-  console.log("Wallet function reached:", userId);
-
-  document.getElementById("walletBalance").textContent = "₦0.00";
-  }  =
-          await supabaseClient.auth.getSession();
-
-
-        if (error) {
-
-          throw error;
-
-        }
-
-
-        if (data.session) {
-
-          await loadAccount();
-
-        } else {
-
-          showAuth();
-
-        }
-
-
-      } catch (error) {
-
-        console.error(
-          "Startup error:",
-          error
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .functions
+        .invoke(
+          "paystack-initialize",
+          {
+            body: {
+              amount: amount,
+              callback_url:
+                window.location.origin
+            }
+          }
         );
 
-        showAuth();
 
-      }
+    if (error) {
 
-    })();
+      throw error;
 
-  </script>
+    }
+
+
+    if (
+      !data ||
+      !data.authorization_url
+    ) {
+
+      throw new Error(
+        data?.message ||
+        "Unable to start Paystack payment."
+      );
+
+    }
+
+
+    window.location.href =
+      data.authorization_url;
+
+
+  } catch(error) {
+
+    console.error(
+      "PAYMENT ERROR:",
+      error
+    );
+
+    showMessage(
+      fundMessage,
+      error.message ||
+        "Payment could not be started.",
+      "error"
+    );
+
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "Continue to Pay";
+
+  }
+
+}
+
+
+/* =====================================================
+   VERIFY PAYMENT AFTER PAYSTACK RETURNS
+===================================================== */
+
+async function checkPaymentReturn() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const reference =
+    params.get(
+      "reference"
+    );
+
+
+  if (!reference) {
+    return;
+  }
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .functions
+        .invoke(
+          "paystack-verify",
+          {
+            body: {
+              reference
+            }
+          }
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    if (
+      data &&
+      data.success
+    ) {
+
+      alert(
+        "Payment successful! Your wallet has been credited."
+      );
+
+
+      await loadWallet(
+        data.user_id
+      );
+
+    } else {
+
+      alert(
+        data?.message ||
+        "Payment could not be verified."
+      );
+
+    }
+
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+
+  } catch(error) {
+
+    console.error(
+      "VERIFY ERROR:",
+      error
+    );
+
+    alert(
+      "Payment verification error: " +
+      (
+        error.message ||
+        "Unknown error"
+      )
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   OTHER SERVICES
+===================================================== */
+
+function showComingSoon(
+  service
+) {
+
+  alert(
+    service +
+    " will be connected soon."
+  );
+
+}
+
+
+function showProfile() {
+
+  alert(
+    "Profile section coming soon."
+  );
+
+}
+
+
+/* =====================================================
+   START APPLICATION
+===================================================== */
+
+(async function() {
+
+  try {
+
+    const {
+      data
+    } =
+      await supabaseClient.auth
+        .getSession();
+
+
+    if (
+      data &&
+      data.session
+    ) {
+
+      await loadAccount();
+
+    } else {
+
+      showAuth();
+
+    }
+
+  } catch(error) {
+
+    console.error(
+      "STARTUP ERROR:",
+      error
+    );
+
+    showAuth();
+
+  }
+
+})();
+
+</script>
 
 </body>
-
 </html>
