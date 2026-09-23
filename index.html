@@ -1462,14 +1462,11 @@
        START APP
     ========================================= */
 
-    (async function() {
+  async function loadWallet(userId) {
+  console.log("Wallet function reached:", userId);
 
-      try {
-
-        const {
-          data,
-          error
-        } =
+  document.getElementById("walletBalance").textContent = "₦0.00";
+  }  =
           await supabaseClient.auth.getSession();
 
 
