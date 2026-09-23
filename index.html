@@ -782,13 +782,54 @@
       try {
 
         const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
+          loginForm.addEventListener("submit", async (event) => {
 
-            email: email,
+  event.preventDefault();
 
-            password: password
+  const email =
+    document.getElementById("loginEmail").value.trim();
 
-          });
+  const password =
+    document.getElementById("loginPassword").value;
+
+  const button =
+    loginForm.querySelector("button[type='submit']");
+
+  button.disabled = true;
+  button.textContent = "Logging in...";
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if (error) throw error;
+
+    loginForm.reset();
+
+    hideMessage(authMessage);
+
+    await loadAccount();
+
+  } catch (error) {
+
+    showMessage(
+      authMessage,
+      error.message,
+      "error"
+    );
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Login";
+
+  }
+
+});
 
 
         if (error) throw error;
@@ -877,46 +918,45 @@ await verifyPaystackPayment();      authScreen.classList.add("hidden");
        LOAD WALLET
        ===================================================== */
 
-    async function loadWallet(userId) {
+   async function loadAccount() {
 
-      try {
+  if (!supabaseClient) return;
 
-        const { data, error } =
-          await supabaseClient
-            .from("wallets")
-            .select("balance")
-            .eq("user_id", userId)
-            .maybeSingle();
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
 
+  if (!user) {
 
-        if (error) throw error;
+    showAuth();
 
+    return;
 
-        const balance =
-          data?.balance || 0;
+  }
 
+  authScreen.classList.add("hidden");
 
-        document.getElementById("walletBalance").textContent =
-          "₦" +
-          Number(balance).toLocaleString(
-            "en-NG",
-            {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-            }
-          );
+  app.classList.remove("hidden");
 
+  const email =
+    user.email || "User";
 
-      } catch (error) {
+  const name =
+    user.user_metadata?.full_name ||
+    email.split("@")[0];
 
-        console.error(
-          "Wallet loading error:",
-          error
-        );
+  document.getElementById("welcomeName").textContent =
+    "Welcome, " + name + " 👋";
 
-      }
+  document.getElementById("headerUser").textContent =
+    email;
 
-    }
+  document.getElementById("accountEmail").textContent =
+    email;
+
+  await loadWallet(user.id);
+
+} 
 
 
     /* =====================================================
