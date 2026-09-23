@@ -1757,7 +1757,108 @@ function showProfile() {
   }
 
 })();
+/* =====================================================
+   PAYSTACK PAYMENT RETURN / VERIFICATION
+===================================================== */
 
+async function checkPaystackReturn() {
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const reference =
+    params.get("reference");
+
+  if (!reference) {
+    return;
+  }
+
+  console.log(
+    "Paystack reference found:",
+    reference
+  );
+
+  try {
+
+    const {
+      data: { session },
+      error: sessionError
+    } =
+      await supabaseClient.auth.getSession();
+
+    if (sessionError || !session) {
+
+      alert(
+        "Please log in again to verify your payment."
+      );
+
+      return;
+    }
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.functions.invoke(
+        "paystack-verify",
+        {
+          body: {
+            reference: reference
+          }
+        }
+      );
+
+    console.log(
+      "Paystack verification:",
+      data
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    if (
+      data &&
+      data.success
+    ) {
+
+      alert(
+        "Payment verified successfully. Your wallet will be updated shortly."
+      );
+
+    } else {
+
+      alert(
+        data?.message ||
+        "Payment could not be verified."
+      );
+
+    }
+
+    /* Remove reference from browser URL */
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Payment verification error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "Unable to verify payment."
+    );
+  }
+}
+
+
+/* Check for Paystack return */
+checkPaystackReturn();
 </script>
 
 </body>
