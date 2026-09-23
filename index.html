@@ -869,18 +869,16 @@
       if (!supabaseClient) return;
 
 
-      const {
-        data: { user }
-      } = await supabaseClient.auth.getUser();
+      const { data, error } =
+  await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
 
+console.log("LOGIN RESULT:", data);
+console.log("LOGIN ERROR:", error);
 
-      if (!user) {
-
-        showAuth();
-
-        return;
-
-      }
+if (error) throw error;
 
 
 await verifyPaystackPayment();      authScreen.classList.add("hidden");
