@@ -1,631 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AyanData - Data & Wallet</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f5f7fb;
-      color: #172033;
-    }
-
-    header {
-      background: #075e54;
-      color: white;
-      padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 {
-      font-size: 22px;
-    }
-
-    header span {
-      font-size: 13px;
-      opacity: 0.9;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .welcome {
-      margin-bottom: 20px;
-    }
-
-    .welcome h2 {
-      font-size: 24px;
-      margin-bottom: 6px;
-    }
-
-    .welcome p {
-      color: #667085;
-    }
-
-    .wallet {
-      background: linear-gradient(135deg, #075e54, #0b806f);
-      color: white;
-      padding: 25px;
-      border-radius: 18px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    }
-
-    .wallet small {
-      opacity: 0.85;
-    }
-
-    .balance {
-      font-size: 32px;
-      font-weight: bold;
-      margin: 10px 0 18px;
-    }
-
-    button {
-      border: none;
-      cursor: pointer;
-      border-radius: 10px;
-      padding: 13px 18px;
-      font-size: 15px;
-      font-weight: bold;
-    }
-
-    .fund-btn {
-      background: white;
-      color: #075e54;
-    }
-
-    .services {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .service {
-      background: white;
-      padding: 22px 15px;
-      border-radius: 15px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-      text-align: center;
-    }
-
-    .service-icon {
-      font-size: 30px;
-      margin-bottom: 10px;
-    }
-
-    .service button {
-      margin-top: 12px;
-      width: 100%;
-      background: #075e54;
-      color: white;
-    }
-
-    .account {
-      margin-top: 20px;
-      background: white;
-      padding: 18px;
-      border-radius: 15px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-    }
-
-    .account p {
-      margin-bottom: 12px;
-      word-break: break-word;
-    }
-
-    .logout {
-      background: #e53935;
-      color: white;
-      width: 100%;
-    }
-
-    .auth-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .auth-box {
-      width: 100%;
-      max-width: 420px;
-      background: white;
-      padding: 28px;
-      border-radius: 18px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-    }
-
-    .logo {
-      text-align: center;
-      color: #075e54;
-      font-size: 30px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .auth-subtitle {
-      text-align: center;
-      color: #667085;
-      margin-bottom: 25px;
-    }
-
-    .tabs {
-      display: flex;
-      margin-bottom: 20px;
-      background: #f1f3f5;
-      border-radius: 10px;
-      padding: 4px;
-    }
-
-    .tab {
-      flex: 1;
-      background: transparent;
-      color: #667085;
-    }
-
-    .tab.active {
-      background: white;
-      color: #075e54;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #d0d5dd;
-      border-radius: 9px;
-      margin-bottom: 16px;
-      font-size: 15px;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #075e54;
-    }
-
-    .auth-submit {
-      width: 100%;
-      background: #075e54;
-      color: white;
-      margin-top: 3px;
-    }
-
-    .message {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 9px;
-      display: none;
-      font-size: 14px;
-    }
-
-    .error {
-      background: #fee4e2;
-      color: #b42318;
-    }
-
-    .success {
-      background: #dcfae6;
-      color: #067647;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      z-index: 1000;
-    }
-
-    .modal-box {
-      background: white;
-      width: 100%;
-      max-width: 400px;
-      border-radius: 18px;
-      padding: 25px;
-    }
-
-    .modal-box h3 {
-      margin-bottom: 8px;
-    }
-
-    .modal-box p {
-      color: #667085;
-      margin-bottom: 20px;
-    }
-
-    .modal-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .modal-buttons button {
-      flex: 1;
-    }
-
-    .cancel {
-      background: #eaecf0;
-      color: #344054;
-    }
-
-    .pay {
-      background: #075e54;
-      color: white;
-    }
-
-    .loading {
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    @media (max-width: 420px) {
-      .services {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .balance {
-        font-size: 28px;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- AUTH SCREEN -->
-  <div id="authScreen" class="auth-screen">
-
-    <div class="auth-box">
-
-      <div class="logo">AyanData</div>
-
-      <div class="auth-subtitle">
-        Data, airtime & digital services
-      </div>
-
-      <div class="tabs">
-        <button id="loginTab" class="tab active" onclick="showLogin()">
-          Login
-        </button>
-
-        <button id="signupTab" class="tab" onclick="showSignup()">
-          Sign Up
-        </button>
-      </div>
-
-      <!-- LOGIN -->
-      <form id="loginForm">
-
-        <label>Email</label>
-        <input
-          type="email"
-          id="loginEmail"
-          placeholder="Enter your email"
-          required
-        >
-
-        <label>Password</label>
-        <input
-          type="password"
-          id="loginPassword"
-          placeholder="Enter your password"
-          required
-        >
-
-        <button type="submit" class="auth-submit" id="loginButton">
-          Login
-        </button>
-
-      </form>
-
-      <!-- SIGN UP -->
-      <form id="signupForm" class="hidden">
-
-        <label>Full Name</label>
-        <input
-          type="text"
-          id="signupName"
-          placeholder="Enter your full name"
-          required
-        >
-
-        <label>Email</label>
-        <input
-          type="email"
-          id="signupEmail"
-          placeholder="Enter your email"
-          required
-        >
-
-        <label>Password</label>
-        <input
-          type="password"
-          id="signupPassword"
-          placeholder="Create a password"
-          minlength="6"
-          required
-        >
-
-        <label>Confirm Password</label>
-        <input
-          type="password"
-          id="signupConfirmPassword"
-          placeholder="Confirm your password"
-          minlength="6"
-          required
-        >
-
-        <button type="submit" class="auth-submit" id="signupButton">
-          Create Account
-        </button>
-
-      </form>
-
-      <div id="authMessage" class="message"></div>
-
-    </div>
-
-  </div>
-
-
-  <!-- MAIN APP -->
-  <div id="app" class="hidden">
-
-    <header>
-      <div>
-        <h1>AyanData</h1>
-        <span>Smart digital services</span>
-      </div>
-
-      <span id="headerUser"></span>
-    </header>
-
-    <main class="container">
-
-      <div class="welcome">
-        <h2 id="welcomeName">Welcome 👋</h2>
-        <p>Manage your wallet and digital services.</p>
-      </div>
-
-
-      <!-- WALLET -->
-      <div class="wallet">
-
-        <small>Wallet Balance</small>
-
-        <div class="balance" id="walletBalance">
-          ₦0.00
-        </div>
-
-        <button class="fund-btn" onclick="openFunding()">
-          + Fund Wallet
-        </button>
-
-      </div>
-
-
-      <!-- SERVICES -->
-      <div class="services">
-
-        <div class="service">
-          <div class="service-icon">📶</div>
-          <strong>Data</strong>
-          <button onclick="showComingSoon('Data')">
-            Buy Data
-          </button>
-        </div>
-
-        <div class="service">
-          <div class="service-icon">📞</div>
-          <strong>Airtime</strong>
-          <button onclick="showComingSoon('Airtime')">
-            Buy Airtime
-          </button>
-        </div>
-
-        <div class="service">
-          <div class="service-icon">📜</div>
-          <strong>History</strong>
-          <button onclick="showComingSoon('Transaction History')">
-            View
-          </button>
-        </div>
-
-        <div class="service">
-          <div class="service-icon">👤</div>
-          <strong>Profile</strong>
-          <button onclick="showProfile()">
-            Open
-          </button>
-        </div>
-
-      </div>
-
-
-      <!-- ACCOUNT -->
-      <div class="account">
-
-        <p>
-          <strong>Account:</strong>
-          <span id="accountEmail">Loading...</span>
-        </p>
-
-        <button class="logout" onclick="logout()">
-          Logout
-        </button>
-
-      </div>
-
-    </main>
-
-  </div>
-
-
-  <!-- FUND WALLET MODAL -->
-  <div id="fundModal" class="modal">
-
-    <div class="modal-box">
-
-      <h3>Fund Wallet</h3>
-
-      <p>
-        Enter the amount you want to add to your AyanData wallet.
-      </p>
-
-      <label>Amount (₦)</label>
-
-      <input
-        type="number"
-        id="fundAmount"
-        min="100"
-        placeholder="e.g. 1000"
-      >
-
-      <div class="modal-buttons">
-
-        <button class="cancel" onclick="closeFunding()">
-          Cancel
-        </button>
-
-        <button class="pay" id="payButton" onclick="startPayment()">
-          Continue to Pay
-        </button>
-
-      </div>
-
-      <div id="fundMessage" class="message"></div>
-
-    </div>
-
-  </div>
-
-
-  <script>
-
-    /* =====================================================
-       SUPABASE CONFIGURATION
-       ===================================================== */
-
-    const SUPABASE_URL = "https://thivhdxiunszfllxbags.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_1o4FBBUkTgfWhRdVA2H5_Q_BBYWpR6w";
-
-
-    let supabaseClient = null;
-
-
-    if (
-      SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
-      SUPABASE_PUBLISHABLE_KEY !== "YOUR_SUPABASE_PUBLISHABLE_KEY"
-    ) {
-
-      supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
-
-    }
-
-
-    /* =====================================================
-       ELEMENTS
-       ===================================================== */
-
-    const authScreen = document.getElementById("authScreen");
-    const app = document.getElementById("app");
-
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
-
-    const loginTab = document.getElementById("loginTab");
-    const signupTab = document.getElementById("signupTab");
-
-    const authMessage = document.getElementById("authMessage");
-
-
-    /* =====================================================
-       MESSAGE HELPER
-       ===================================================== */
-
-    function showMessage(element, message, type) {
-
-      element.textContent = message;
-
-      element.className = "message " + type;
-
-      element.style.display = "block";
-
-    }
-
-
-    function hideMessage(element) {
-
-      element.style.display = "none";
-
-    }
-
-
-    /* =====================================================
-       AUTH TABS
-       ===================================================== */
-
-    function showLogin() {
-
-      loginForm.classList.remove("hidden");
-      signupForm.classList.add("hidden");
-
-      loginTab.classList.add("active");
-      signupTab.classList.remove("active");
-
-      hideMessage(authMessage);
-
-    }
-
-
-    function showSignup() {
-
-      loginForm.classList.add("hidden");
-      signupForm.classList.remove("hidden");
-
-      loginTab.classList.remove("active");
-      signupTab.classList.add("active");
-
-      hideMessage(authMessage);
-
-    }
+Html 
+<script>
 /* =====================================================
-   AUTH TAB BUTTONS
+   AYANDATA — CLEAN FRONTEND FOUNDATION
+   ===================================================== */
+
+const SUPABASE_URL =
+  "https://thivhdxiunszfllxbags.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_1o4FBBUkTgfWhRdVA2H5_Q_BBYWpR6w";
+
+
+/* =====================================================
+   SUPABASE
+   ===================================================== */
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =====================================================
+   ELEMENTS
+   ===================================================== */
+
+const authScreen =
+  document.getElementById("authScreen");
+
+const app =
+  document.getElementById("app");
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const signupForm =
+  document.getElementById("signupForm");
+
+const loginTab =
+  document.getElementById("loginTab");
+
+const signupTab =
+  document.getElementById("signupTab");
+
+const authMessage =
+  document.getElementById("authMessage");
+
+
+/* =====================================================
+   MESSAGE
+   ===================================================== */
+
+function showMessage(element, message, type) {
+
+  element.textContent = message;
+
+  element.className =
+    "message " + type;
+
+  element.style.display = "block";
+
+}
+
+
+function hideMessage(element) {
+
+  element.style.display = "none";
+
+}
+
+
+/* =====================================================
+   SHOW LOGIN
+   ===================================================== */
+
+function showLogin() {
+
+  loginForm.classList.remove("hidden");
+
+  signupForm.classList.add("hidden");
+
+  loginTab.classList.add("active");
+
+  signupTab.classList.remove("active");
+
+  hideMessage(authMessage);
+
+}
+
+
+/* =====================================================
+   SHOW SIGN UP
+   ===================================================== */
+
+function showSignup() {
+
+  loginForm.classList.add("hidden");
+
+  signupForm.classList.remove("hidden");
+
+  loginTab.classList.remove("active");
+
+  signupTab.classList.add("active");
+
+  hideMessage(authMessage);
+
+}
+
+
+/* =====================================================
+   LOGIN TAB
    ===================================================== */
 
 loginTab.addEventListener("click", function () {
@@ -635,6 +120,10 @@ loginTab.addEventListener("click", function () {
 });
 
 
+/* =====================================================
+   SIGN UP TAB
+   ===================================================== */
+
 signupTab.addEventListener("click", function () {
 
   showSignup();
@@ -643,355 +132,230 @@ signupTab.addEventListener("click", function () {
 
 
 /* =====================================================
-   LOGIN FORM
+   LOGIN
    ===================================================== */
 
-loginForm.addEventListener("submit", async function (event) {
+loginForm.addEventListener(
+  "submit",
+  async function (event) {
 
-  event.preventDefault();
+    event.preventDefault();
 
-  const button =
-    loginForm.querySelector("button[type='submit']");
+    const button =
+      document.getElementById("loginButton");
 
-  const email =
-    document.getElementById("loginEmail").value.trim();
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
 
-  const password =
-    document.getElementById("loginPassword").value;
-
-  try {
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
 
     button.disabled = true;
-    button.textContent = "Logging in...";
 
-    const { data, error } =
-      await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
+    button.textContent =
+      "Logging in...";
 
-    if (error) throw error;
-
-    loginForm.reset();
-
-    hideMessage(authMessage);
-
-    await loadAccount();
-
-  } catch (error) {
-
-    showMessage(
-      authMessage,
-      error.message,
-      "error"
-    );
-
-  } finally {
-
-    button.disabled = false;
-    button.textContent = "Login";
-
-  }
-
-});
-
-    /* =====================================================
-       CHECK SUPABASE
-       ===================================================== */
-
-    function checkSupabase() {
-
-      if (!supabaseClient) {
-
-        showMessage(
-          authMessage,
-          "Supabase is not configured. Please add your Supabase Project URL and Publishable Key.",
-          "error"
-        );
-
-        return false;
-
-      }
-
-      return true;
-
-    }
-
-
-    /* =====================================================
-       SIGN UP
-       ===================================================== */
-
-    signupForm.addEventListener("submit", async function(event) {
-
-      event.preventDefault();
-
-      if (!checkSupabase()) return;
-
-
-      const name =
-        document.getElementById("signupName").value.trim();
-
-      const email =
-        document.getElementById("signupEmail").value.trim();
-
-      const password =
-        document.getElementById("signupPassword").value;
-
-      const confirmPassword =
-        document.getElementById("signupConfirmPassword").value;
-
-
-      if (password !== confirmPassword) {
-
-        showMessage(
-          authMessage,
-          "Passwords do not match.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const button =
-        document.getElementById("signupButton");
-
-      button.disabled = true;
-      button.textContent = "Creating Account...";
-
-
-      try {
-
-        const { data, error } =
-          await supabaseClient.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-
-              data: {
-                full_name: name
-              }
-
-            }
-
-          });
-
-
-        if (error) throw error;
-
-
-        showMessage(
-          authMessage,
-          "Account created successfully. Please check your email if confirmation is required.",
-          "success"
-        );
-
-
-        signupForm.reset();
-
-
-        setTimeout(() => {
-
-          showLogin();
-
-          document.getElementById("loginEmail").value =
-            email;
-
-        }, 1500);
-
-
-      } catch (error) {
-
-        showMessage(
-          authMessage,
-          error.message,
-          "error"
-        );
-
-      } finally {
-
-        button.disabled = false;
-        button.textContent = "Create Account";
-
-      }
-
-    });
-
-
-    /* =====================================================
-       LOGIN
-       ===================================================== */
-
-    loginForm.addEventListener("submit", async function(event) {
-
-      event.preventDefault();
-
-      if (!checkSupabase()) return;
-
-
-      const email =
-        document.getElementById("loginEmail").value.trim();
-
-      const password =
-        document.getElementById("loginPassword").value;
-
-
-      const button =
-        document.getElementById("loginButton");
-
-      button.disabled = true;
-      button.textContent = "Logging in...";
-
-
-      try {
-
-        const { data, error } =
-          loginForm.addEventListener("submit", async (event) => {
-
-  event.preventDefault();
-
-  const email =
-    document.getElementById("loginEmail").value.trim();
-
-  const password =
-    document.getElementById("loginPassword").value;
-
-  const button =
-    loginForm.querySelector("button[type='submit']");
-
-  button.disabled = true;
-  button.textContent = "Logging in...";
-
-  try {
-
-    const { data, error } =
-      await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-    if (error) throw error;
-
-    loginForm.reset();
-
-    hideMessage(authMessage);
-
-    await loadAccount();
-
-  } catch (error) {
-
-    showMessage(
-      authMessage,
-      error.message,
-      "error"
-    );
-
-  } finally {
-
-    button.disabled = false;
-    button.textContent = "Login";
-
-  }
-
-});
-
-
-        if (error) throw error;
-
-
-        loginForm.reset();
-
-        hideMessage(authMessage);
-
-        await loadAccount();
-
-
-      } catch (error) {
-
-        showMessage(
-          authMessage,
-          error.message,
-          "error"
-        );
-
-      } finally {
-
-        button.disabled = false;
-        button.textContent = "Login";
-
-      }
-
-    });
-
-
-    /* =====================================================
-       LOAD ACCOUNT
-       ===================================================== */
-
-    async function loadAccount() {
-
-      if (!supabaseClient) return;
-
+    try {
 
       const { data, error } =
-  await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
+        await supabaseClient.auth.signInWithPassword({
 
-console.log("LOGIN RESULT:", data);
-console.log("LOGIN ERROR:", error);
+          email: email,
 
-if (error) throw error;
+          password: password
+
+        });
 
 
-await verifyPaystackPayment();      authScreen.classList.add("hidden");
+      if (error) {
 
-      app.classList.remove("hidden");
+        throw error;
 
-
-      const email =
-        user.email || "User";
+      }
 
 
-      const name =
-        user.user_metadata?.full_name ||
-        email.split("@")[0];
+      loginForm.reset();
+
+      hideMessage(authMessage);
+
+      await loadAccount();
 
 
-      document.getElementById("welcomeName").textContent =
-        "Welcome, " + name + " 👋";
+    } catch (error) {
+
+      showMessage(
+        authMessage,
+        error.message,
+        "error"
+      );
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "Login";
+
+    }
+
+  }
+);
 
 
-      document.getElementById("headerUser").textContent =
-        email;
+/* =====================================================
+   SIGN UP
+   ===================================================== */
+
+signupForm.addEventListener(
+  "submit",
+  async function (event) {
+
+    event.preventDefault();
+
+    const button =
+      document.getElementById("signupButton");
+
+    const name =
+      document
+        .getElementById("signupName")
+        .value
+        .trim();
+
+    const email =
+      document
+        .getElementById("signupEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("signupPassword")
+        .value;
+
+    const confirmPassword =
+      document
+        .getElementById("signupConfirmPassword")
+        .value;
 
 
-      document.getElementById("accountEmail").textContent =
-        email;
+    if (password !== confirmPassword) {
 
+      showMessage(
+        authMessage,
+        "Passwords do not match.",
+        "error"
+      );
 
-      await loadWallet(user.id);
+      return;
 
     }
 
 
-    /* =====================================================
-       LOAD WALLET
-       ===================================================== */
+    button.disabled = true;
 
-   async function loadAccount() {
+    button.textContent =
+      "Creating Account...";
 
-  if (!supabaseClient) return;
+
+    try {
+
+      const { data, error } =
+        await supabaseClient.auth.signUp({
+
+          email: email,
+
+          password: password,
+
+          options: {
+
+            data: {
+              full_name: name
+            }
+
+          }
+
+        });
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      signupForm.reset();
+
+
+      showMessage(
+        authMessage,
+        "Account created. Check your email if confirmation is required.",
+        "success"
+      );
+
+
+      setTimeout(function () {
+
+        showLogin();
+
+        document
+          .getElementById("loginEmail")
+          .value = email;
+
+      }, 1500);
+
+
+    } catch (error) {
+
+      showMessage(
+        authMessage,
+        error.message,
+        "error"
+      );
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "Create Account";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   LOAD ACCOUNT
+   ===================================================== */
+
+async function loadAccount() {
 
   const {
-    data: { user }
+    data: { user },
+    error
   } = await supabaseClient.auth.getUser();
+
+
+  if (error) {
+
+    console.error(
+      "Auth error:",
+      error
+    );
+
+    showAuth();
+
+    return;
+
+  }
+
 
   if (!user) {
 
@@ -1001,371 +365,180 @@ await verifyPaystackPayment();      authScreen.classList.add("hidden");
 
   }
 
-  authScreen.classList.add("hidden");
 
-  app.classList.remove("hidden");
+  authScreen.classList.add(
+    "hidden"
+  );
+
+  app.classList.remove(
+    "hidden"
+  );
+
 
   const email =
     user.email || "User";
+
 
   const name =
     user.user_metadata?.full_name ||
     email.split("@")[0];
 
-  document.getElementById("welcomeName").textContent =
-    "Welcome, " + name + " 👋";
 
-  document.getElementById("headerUser").textContent =
-    email;
+  document
+    .getElementById("welcomeName")
+    .textContent =
+      "Welcome, " + name + " 👋";
 
-  document.getElementById("accountEmail").textContent =
-    email;
 
-  await loadWallet(user.id);
+  document
+    .getElementById("headerUser")
+    .textContent =
+      email;
 
-} 
 
+  document
+    .getElementById("accountEmail")
+    .textContent =
+      email;
 
-    /* =====================================================
-       LOGOUT
-       ===================================================== */
 
-    async function logout() {
+  await loadWallet(
+    user.id
+  );
 
-      if (!supabaseClient) return;
+}
 
-
-      await supabaseClient.auth.signOut();
-
-      showAuth();
-
-    }
-
-
-    function showAuth() {
-
-      app.classList.add("hidden");
-
-      authScreen.classList.remove("hidden");
-
-      showLogin();
-
-    }
-
-
-    /* =====================================================
-       FUND WALLET
-       ===================================================== */
-
-    function openFunding() {
-
-      document.getElementById("fundModal").style.display =
-        "flex";
-
-      document.getElementById("fundAmount").value = "";
-
-      hideMessage(
-        document.getElementById("fundMessage")
-      );
-
-    }
-
-
-    function closeFunding() {
-
-      document.getElementById("fundModal").style.display =
-        "none";
-
-    }
-
-
-    async function startPayment() {
-
-      if (!supabaseClient) {
-
-        showMessage(
-          document.getElementById("fundMessage"),
-          "Supabase is not configured.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const amount =
-        Number(
-          document.getElementById("fundAmount").value
-        );
-
-
-      if (!amount || amount < 100) {
-
-        showMessage(
-          document.getElementById("fundMessage"),
-          "Minimum funding amount is ₦100.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const {
-        data: { user },
-        error: userError
-      } =
-        await supabaseClient.auth.getUser();
-
-
-      if (userError || !user) {
-
-        showMessage(
-          document.getElementById("fundMessage"),
-          "Please login to your AyanData account before funding your wallet.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const button =
-        document.getElementById("payButton");
-
-      button.disabled = true;
-
-      button.textContent =
-        "Connecting to Paystack...";
-
-
-      try {
-
-        const { data, error } =
-          await supabaseClient.functions.invoke(
-  "Paystack-initialize-",
-            {
-              body: {
-                amount: amount
-              }
-            }
-          );
-
-
-        if (error) {
-
-          throw new Error(
-            error.message ||
-            "Unable to initialize payment."
-          );
-
-        }
-
-
-        if (
-          !data ||
-          !data.authorization_url
-        ) {
-
-          throw new Error(
-            data?.message ||
-            "Paystack did not return a payment link."
-          );
-
-        }
-
-localStorage.setItem(
-  "ayandata_payment_reference",
-  data.reference
-);
-
-window.location.href =
-  data.authorization_url;
-        
-
-      } catch (error) {
-
-        console.error(
-          "Payment error:",
-          error
-        );
-
-
-        showMessage(
-          document.getElementById("fundMessage"),
-          error.message ||
-          "Unable to start payment.",
-          "error"
-        );
-
-
-        button.disabled = false;
-
-        button.textContent =
-          "Continue to Pay";
-
-      }
-
-    }
-
-
-    /* =====================================================
-       OTHER SERVICES
-       ===================================================== */
-
-    function showComingSoon(service) {
-
-      alert(
-        service +
-        " service is coming next. We are connecting it to the AyanData backend."
-      );
-
-    }
-
-
-    function showProfile() {
-
-      alert(
-        "Your profile is connected to your AyanData account."
-      );
-
-    }
-
-
-    /* =====================================================
-       AUTH STATE LISTENER
-       ===================================================== */
-
-    if (supabaseClient) {
-
-      supabaseClient.auth.onAuthStateChange(
-        async function(event, session) {
-
-          if (session) {
-
-            await loadAccount();
-
-          } else {
-
-            showAuth();
-
-          }
-
-        }
-      );
-
-    }
 
 /* =====================================================
-   VERIFY PAYSTACK PAYMENT
+   SHOW AUTH
    ===================================================== */
 
-async function verifyPaystackPayment() {
+function showAuth() {
 
-const urlParams = new URLSearchParams(window.location.search);
+  app.classList.add(
+    "hidden"
+  );
 
-const reference =
-  urlParams.get("reference") ||
-  localStorage.getItem("ayandata_payment_reference");
+  authScreen.classList.remove(
+    "hidden"
+  );
 
-  if (!reference || !supabaseClient) {
-    return;
-  }
+  showLogin();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  showAuth();
+
+}
+
+
+/* =====================================================
+   WALLET
+   ===================================================== */
+
+async function loadWallet(userId) {
+
+  console.log(
+    "Wallet loading for:",
+    userId
+  );
+
+  document
+    .getElementById("walletBalance")
+    .textContent =
+      "₦0.00";
+
+}
+
+
+/* =====================================================
+   FUNDING — TEMPORARILY DISABLED
+   ===================================================== */
+
+function openFunding() {
+
+  document
+    .getElementById("fundModal")
+    .style.display = "flex";
+
+}
+
+
+function closeFunding() {
+
+  document
+    .getElementById("fundModal")
+    .style.display = "none";
+
+}
+
+
+/* =====================================================
+   SERVICES
+   ===================================================== */
+
+function showComingSoon(service) {
+
+  alert(
+    service +
+    " will be connected soon."
+  );
+
+}
+
+
+function showProfile() {
+
+  alert(
+    "Profile section coming soon."
+  );
+
+}
+
+
+/* =====================================================
+   START APPLICATION
+   ===================================================== */
+
+(async function () {
 
   try {
 
-    console.log("Verifying payment:", reference);
+    const {
+      data: { session }
+    } =
+      await supabaseClient.auth.getSession();
 
-    const { data, error } =
-      
-const {
-  data: { session }
-} = await supabaseClient.auth.getSession();
 
-if (!session || !session.access_token) {
-  console.error("No active login session.");
-  return;
-}
+    if (session) {
 
-const { data, error } =
-  await supabaseClient.functions.invoke(
-    "Paystack-verify",
-    {
-      headers: {
-        Authorization: `Bearer ${session.access_token}`
-      },
-      body: {
-        reference: reference
-      }
-    }
-  );
-    if (error) {
-      console.error("Payment verification error:", error);
-      return;
-    }
+      await loadAccount();
 
-    console.log("Payment verification result:", data);
+    } else {
 
-    if (
-      data &&
-      (
-        data.status === "success" ||
-        data.success === true
-      )
-    ) {
-
-      localStorage.removeItem(
-        "ayandata_payment_reference"
-      );
-
-      alert(
-        "Payment successful! Your AyanData wallet has been updated."
-      );
-
-      const {
-        data: { user }
-      } = await supabaseClient.auth.getUser();
-
-      if (user) {
-        await loadWallet(user.id);
-      }
+      showAuth();
 
     }
 
   } catch (error) {
 
     console.error(
-      "Verification failed:",
+      "Application startup error:",
       error
     );
 
+    showAuth();
+
   }
 
-}
-    /* =====================================================
-       INITIAL LOAD
-       ===================================================== */
-
-    if (supabaseClient) {
-
-
-}
-    } else {
-
-      showAuth();
-
-      showMessage(
-        authMessage,
-        "Add your Supabase Project URL and Publishable Key to connect AyanData.",
-        "error"
-      );
-
-    }
-
-  </script>
-
-</body>
-</html>
+})();
+</script>
