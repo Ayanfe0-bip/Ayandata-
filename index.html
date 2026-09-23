@@ -624,7 +624,76 @@
       hideMessage(authMessage);
 
     }
+/* =====================================================
+   AUTH TAB BUTTONS
+   ===================================================== */
 
+loginTab.addEventListener("click", function () {
+
+  showLogin();
+
+});
+
+
+signupTab.addEventListener("click", function () {
+
+  showSignup();
+
+});
+
+
+/* =====================================================
+   LOGIN FORM
+   ===================================================== */
+
+loginForm.addEventListener("submit", async function (event) {
+
+  event.preventDefault();
+
+  const button =
+    loginForm.querySelector("button[type='submit']");
+
+  const email =
+    document.getElementById("loginEmail").value.trim();
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+  try {
+
+    button.disabled = true;
+    button.textContent = "Logging in...";
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if (error) throw error;
+
+    loginForm.reset();
+
+    hideMessage(authMessage);
+
+    await loadAccount();
+
+  } catch (error) {
+
+    showMessage(
+      authMessage,
+      error.message,
+      "error"
+    );
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Login";
+
+  }
+
+});
 
     /* =====================================================
        CHECK SUPABASE
