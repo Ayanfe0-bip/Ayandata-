@@ -1244,34 +1244,192 @@ async function loadWallet(
 
 function openFunding() {
 
-  fundModal.style.display =
-    "flex";
+  fundModal.style.display = "flex";
 
-  document
-    .getElementById(
-      "fundAmount"
-    )
-    .value = "";
+  document.getElementById("fundAmount").value = "";
 
-  hideMessage(
-    fundMessage
-  );
+  hideMessage(fundMessage);
 
 }
 
 
 function closeFunding() {
 
-  fundModal.style.display =
-    "none";
+  fundModal.style.display = "none";
 
 }
 
 
+/* =====================================================
+   START PAYSTACK PAYMENT
+===================================================== */
+
+async function startPayment() {
+
+  const amountInput =
+    document.getElementById("fundAmount");
+
+  const payButton =
+    document.getElementById("payButton");
+
+  const amount =
+    Number(amountInput.value);
+
+
+  /* Check amount */
+
+  if (!amount || amount < 100) {
+
+    showMessage(
+      fundMessage,
+      "Please enter at least ₦100.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  /* Check Supabase */
+
+  if (!supabaseClient) {
+
+    showMessage(
+      fundMessage,
+      "Supabase is not connected.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    payButton.disabled = true;
+
+    payButton.textContent =
+      "Starting payment...";
+
+
+    /* Get logged-in user */
+
+    const {
+      data: { user },
+      error: userError
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if (userError || !user) {
+
+      throw new Error(
+        "You must be logged in before funding your wallet."
+      );
+
+    }
+
+
+    /* Call our Supabase Edge Function */
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.functions.invoke(
+        "paystack-initialize",
+        {
+          body: {
+            amount: amount,
+            email: user.email
+          }
+        }
+      );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    console.log(
+      "Paystack initialize response:",
+      data
+    );
+
+
+    if (
+      !data ||
+      !data.authorization_url
+    ) {
+
+      throw new Error(
+        data?.message ||
+        "Paystack did not return a payment link."
+      );
+
+    }
+
+
+    /*
+      Save the reference temporarily.
+      We will use it after payment.
+    */
+
+    if (data.reference) {
+
+      sessionStorage.setItem(
+        "ayanDataPaymentReference",
+        data.reference
+      );
+
+    }
+
+
+    /*
+      Send the customer to Paystack.
+    */
+
+    window.location.href =
+      data.authorization_url;
+
+
+  } catch (error) {
+
+    console.error(
+      "Payment initialization error:",
+      error
+    );
+
+
+    showMessage(
+      fundMessage,
+      error.message ||
+        "Unable to start payment.",
+      "error"
+    );
+
+
+    payButton.disabled = false;
+
+    payButton.textContent =
+      "Continue to Pay";
+
+  }
+
+}
+
+
+/* =====================================================
+   FUNDING BUTTONS
+===================================================== */
+
 document
-  .getElementById(
-    "fundWalletButton"
-  )
+  .getElementById("fundWalletButton")
   .addEventListener(
     "click",
     openFunding
@@ -1279,15 +1437,19 @@ document
 
 
 document
-  .getElementById(
-    "cancelFundingButton"
-  )
+  .getElementById("cancelFundingButton")
   .addEventListener(
     "click",
     closeFunding
   );
 
 
+document
+  .getElementById("payButton")
+  .addEventListener(
+    "click",
+    startPayment
+  );
 /* =====================================================
    START PAYSTACK PAYMENT
 ===================================================== */
