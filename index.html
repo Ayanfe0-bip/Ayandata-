@@ -1349,9 +1349,9 @@ async function startPayment() {
       );
 
 
-    if (error) {
-
-      throw error;
+      if (error) {
+  console.error("FUNCTION ERROR:", error);
+      }
 
     }
 
@@ -1360,7 +1360,8 @@ async function startPayment() {
       "Paystack initialize response:",
       data
     );
-
+console.log("PAYSTACK DATA:", data);
+console.log("PAYSTACK ERROR:", error);
 
     if (
       !data ||
