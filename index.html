@@ -1362,7 +1362,10 @@ async function startPayment() {
     );
 console.log("PAYSTACK DATA:", data);
 console.log("PAYSTACK ERROR:", error);
-
+alert(
+  "PAYSTACK DATA: " +
+  JSON.stringify(data)
+);
     if (
       !data ||
       !data.authorization_url
